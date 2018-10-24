@@ -20,7 +20,7 @@ const createApp = () => {
     app.use(compression())
 
     // api route
-    app.use('/api', require('./api'))
+    app.use('/api', require('./api/router'))
 
     // static file-serving middleware
     app.use(express.static(path.join(__dirname, '../..', 'public')))
@@ -40,7 +40,7 @@ const createApp = () => {
     app.use((err, req, res, next) => {
         console.error(err)
         console.error(err.stack)
-        res.status(err.status || 500).sent(err.message || 'Intenal server error.')
+        res.status(err.status || 500).send(err.message || 'Intenal server error.')
     })
 }
 

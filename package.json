@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
@@ -12,11 +13,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": "react-app"
   },
