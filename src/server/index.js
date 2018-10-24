@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
 
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 const app = express()
 
 module.exports = app
@@ -23,7 +23,7 @@ const createApp = () => {
     app.use('/api', require('./api/router'))
 
     // static file-serving middleware
-    app.use(express.static(path.join(__dirname, '../..', 'public')))
+    app.use(express.static(path.join(__dirname, '../..', 'build')))
 
     // handle 404
     app.use((req, res, next) => {

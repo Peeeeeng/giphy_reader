@@ -1,4 +1,4 @@
-const API_KEY = require('../secrets') || process.env.API_KEY
+const API_KEY = process.env.API_KEY || require('../secrets')
 const axios = require('axios')
 const router = require('express').Router()
 

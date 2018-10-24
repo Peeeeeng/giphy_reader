@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sync": "nodemon run src/server/index.js && npm start",
+    "sync": "node src/server/index.js",
     "heroku-postbuild": "npm install && npm run build"
   },
   "proxy": "http://localhost:8080",
