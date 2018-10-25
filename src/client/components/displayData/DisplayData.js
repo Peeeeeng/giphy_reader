@@ -316,8 +316,8 @@ render() {
                     {/* <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                     </TableCell> */}
-                    <TableCell component="th" scope="row" padding="none">
-                        {n.embed_url}
+                    <TableCell>
+                        <img src={n.images.fixed_height_small.url} alt={n.slug} />
                     </TableCell>
                     <TableCell numeric>{n.title}</TableCell>
                     <TableCell numeric>{n.id}</TableCell>
