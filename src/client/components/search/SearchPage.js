@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux'
+import DisplayData from '../displayData/DisplayData'
+import { getGifs } from '../../store/gifReducer'
 
 
 
@@ -16,8 +19,9 @@ class SearchPage extends Component {
     handleSearch = async (evt) => {
         console.log(this.state.searchTerm)
         evt.persist()
-        const res = await axios.get(`api/keywords/${this.state.searchTerm}`)
-        console.log(res.data)
+        // const res = await axios.get(`api/keywords/${this.state.searchTerm}`)
+        this.props.getGifs({text:this.state.searchTerm, type: 'keywords'})
+        // console.log(res.data)
     }
 
     // fetchData = async (search) => {
@@ -40,9 +44,18 @@ class SearchPage extends Component {
                 <button onClick={this.handleSearch}>
                 Search
                 </button>
+                <DisplayData />
             </div>
         )
     }
 }
 
-export default SearchPage
+const mapDispatch = (dispatch) => {
+    return {
+        getGifs: searchTerm => {
+            dispatch(getGifs(searchTerm))
+        }
+    }
+}
+
+export default connect(null, mapDispatch)(SearchPage)

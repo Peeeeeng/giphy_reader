@@ -24,7 +24,7 @@ export const getGifs = (searchTerm) => async (dispatch) => {
             let searchStr = searchTerm.text
             res = await axios.get(`api/id/${searchStr}`)
         }
-        const gifArr = res.data
+        const gifArr = res.data.data
         dispatch(setGifs(gifArr))
 
     } catch(err) {
