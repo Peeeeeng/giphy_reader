@@ -18,9 +18,39 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* #searchButton {
+
+} */
+
+button {
+  margin-left: 0.5vw;
 }
+
+input {
+  margin: 0.5vw
+}
+label {
+  margin: 0.5vw
+}
+
+#searchInput {
+  width: 30vw;
+}
+
+.advanceSearch {
+  display: grid;
+  grid-template-columns: 60% 40%
+}
+
+/* #BSOptions {
+  display: flex;
+  margin-right: 0;
+} */
+
+#BSOptions > * {
+  margin-right: 0;
+}
+
 
 @keyframes App-logo-spin {
   from {
