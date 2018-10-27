@@ -12,7 +12,7 @@ class SearchPanel extends Component {
         this.state = {
             byKeywords: true,
             searchInput: '',
-            source: 'public',
+            resource: 'gifs',
             totalLimit: 25,
             offset: 0,
             rating: '',
@@ -22,7 +22,7 @@ class SearchPanel extends Component {
         this.handleSearch = this.handleSearch.bind(this)
         this.handleInput = this.handleInput.bind(this)
         this.handleBSOptions = this.handleBSOptions.bind(this)
-        this.handleSourceChange = this.handleSourceChange.bind(this)
+        this.handleSelectChange = this.handleSelectChange.bind(this)
     }
 
     handleInput = (evt) => {
@@ -33,10 +33,38 @@ class SearchPanel extends Component {
 
     handleSearch = async (evt) => {
         console.log(this.state.searchInput)
+        
+        const { 
+            searchInput, 
+            byKeywords, 
+            resource, 
+            totalLimit, 
+            offset, 
+            rating, 
+            lang 
+        } = this.state 
+        if(isNaN(totalLimit) || isNaN(offset)){
+            return false
+        }
         evt.persist()
-        const searchTerm = {}
-        searchTerm.text = this.state.searchInput
-        searchTerm.type = this.state.byKeywords ? 'keywords' : 'id'
+        const searchTerm = {
+            text: searchInput,
+            type: byKeywords ? 'keywords' : 'id',
+            resource,
+            rating,
+            lang,
+            limit: Math.abs(Math.floor(totalLimit)),
+            offset: Math.abs(Math.floor(offset)),
+        }
+        // searchTerm.text = searchInput
+        // searchTerm.type = byKeywords ? 'keywords' : 'id'
+        // searchTerm.resource = resource
+
+        // searchTerm.language = lang
+        const limit = Math.floor(totalLimit)
+        console.log(limit)
+        console.log(!isNaN(totalLimit))
+
         this.props.getGifs(searchTerm)
     }
 
@@ -49,7 +77,7 @@ class SearchPanel extends Component {
         }
     }
 
-    handleSourceChange = (evt) => {
+    handleSelectChange = (evt) => {
         // console.log(evt.target.id)
         // console.log(evt.target.value)
         this.setState({...this.state, [evt.target.id]: evt.target.value})
@@ -62,7 +90,7 @@ class SearchPanel extends Component {
     }
 
     render(){
-        const { byKeywords } = this.state
+        const { totalLimit, offset, searchInput } = this.state
         console.log(this.state)
         return (
             <div>
@@ -74,7 +102,8 @@ class SearchPanel extends Component {
                         />
                         <button id='searchButton'
                         onClick={this.handleSearch}
-                        > Search
+                        disabled={isNaN(totalLimit) || isNaN(offset)}
+                        > {searchInput?'Search':'Random'}
                         </button>
                     </div>
                     <div id='BSOptions'>
@@ -82,10 +111,11 @@ class SearchPanel extends Component {
                         name='searchBy' 
                         value='keywords' 
                         id='searchByKeywords'
-                        checked={byKeywords} 
+                        defaultChecked={true}
+                        // checked={byKeywords} 
                         onClick={this.handleBSOptions}
                         />
-                        <label for='searchByKeywords'>
+                        <label htmlFor='searchByKeywords'>
                             Keywords
                         </label>
                         
@@ -93,10 +123,10 @@ class SearchPanel extends Component {
                         name='searchBy' 
                         value='id' 
                         id='searchById'
-                        checked={!byKeywords} 
+                        // checked={!byKeywords} 
                         onClick={this.handleBSOptions}
                         />
-                        <label for='searchById'>
+                        <label htmlFor='searchById'>
                             Gif Id
                         </label>
                         
@@ -109,16 +139,16 @@ class SearchPanel extends Component {
                 <div className='advanceSearch'>
                     <div className='ASSelector'>
 
-                        <label>Source</label>
-                        <select id='source'
-                        onChange={this.handleSourceChange}>
-                            <option value="public">Public</option>
-                            <option value="sticker">Sticker</option>
+                        <label>resource</label>
+                        <select id='resource'
+                        onChange={this.handleSelectChange}>
+                            <option value="gifs">Gifs</option>
+                            <option value="stickers">Stickers</option>
                         </select>
 
                         <label>Rating</label>
                         <select id='rating'
-                        onChange={this.handleSourceChange}>
+                        onChange={this.handleSelectChange}>
                             {ratingType.map((rating) => {
                                 return (
                                     <option value={rating}>{rating}</option>
@@ -128,7 +158,7 @@ class SearchPanel extends Component {
 
                         <label>Language</label>
                         <select id='lang'
-                        onChange={this.handleSourceChange}>
+                        onChange={this.handleSelectChange}>
                         {langType.map((language) => {
                             const [ key ] = Object.keys(language)
                                 return (
@@ -138,6 +168,7 @@ class SearchPanel extends Component {
                         </select>
 
                     </div>
+
                     <div className='ASInputer'>
                         <div>
                             <label>Result Number Limit</label>
@@ -145,6 +176,9 @@ class SearchPanel extends Component {
                             placeholder='25'
                             onChange={this.handleInput}
                             />
+                            <font color="red">{isNaN(totalLimit)
+                            ? 'Please enter a proper number.'
+                            : ''}</font>
                         </div>
                         <div>
                             <label>Offset</label>
@@ -152,6 +186,9 @@ class SearchPanel extends Component {
                             placeholder='0'
                             onChange={this.handleInput}
                             />
+                            <font color="red">{isNaN(offset)
+                            ? 'Please enter a proper number.'
+                            : ''}</font>
                         </div>
                     </div>
                 </div>

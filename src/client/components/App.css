@@ -39,7 +39,7 @@ label {
 
 .advanceSearch {
   display: grid;
-  grid-template-columns: 60% 40%
+  grid-template-columns: 50% 50%
 }
 
 /* #BSOptions {
@@ -48,7 +48,7 @@ label {
 } */
 
 #BSOptions > * {
-  margin-right: 0;
+  margin-left: 0;
 }
 
 

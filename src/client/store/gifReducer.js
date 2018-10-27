@@ -17,16 +17,21 @@ const setGifs = (gifArr) => ({ type: SET_GIFS, gifArr })
 export const getGifs = (searchTerm) => async (dispatch) => {
     try{
         let res
+        let gifArr
+        let { resource } = searchTerm
         if(searchTerm.type === 'keywords'){
             let searchStr = searchTerm.text.split(' ').join('+')
-            res = await axios.get(`api/keywords/${searchStr}`)
+            res = await axios.get(`api/${resource}/keywords/${searchStr}`)
+            gifArr = res.data.data
         } else {
             let searchStr = searchTerm.text
-            res = await axios.get(`api/id/${searchStr}`)
+            res = await axios.get(`api/${resource}/id/${searchStr}`)
+            gifArr = [res.data.data]
         }
-        const gifArr = res.data.data
+        console.log('-===Set up gifArr===-')
+        console.log(res.data.data)
         dispatch(setGifs(gifArr))
-
+        
     } catch(err) {
         console.error(err)
     }

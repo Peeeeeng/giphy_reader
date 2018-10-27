@@ -112,7 +112,7 @@ class EnhancedTableHead extends Component {
   }
   
 EnhancedTableHead.propTypes = {
-numSelected: PropTypes.number.isRequired,
+// numSelected: PropTypes.number.isRequired,
 onRequestSort: PropTypes.func.isRequired,
 // onSelectAllClick: PropTypes.func.isRequired,
 order: PropTypes.string.isRequired,
@@ -173,7 +173,7 @@ return (
   
 EnhancedTableToolbar.propTypes = {
 classes: PropTypes.object.isRequired,
-numSelected: PropTypes.number.isRequired,
+// numSelected: PropTypes.number.isRequired,
 };
   
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
