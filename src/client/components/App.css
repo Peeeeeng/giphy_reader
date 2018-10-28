@@ -42,6 +42,36 @@ label {
   grid-template-columns: 50% 50%
 }
 
+#advanceSearch {
+  background-color: white;
+  color: black;
+  text-decoration: underline;
+  border: 1px solid #cbe5fd;
+}
+
+#advanceSearch:hover {
+  border: 1px solid #93b4fd;
+}
+
+#advanceSearch:disabled {
+  background-color: white;
+  color: gray;
+  border: 1px solid rgb(226, 226, 226);
+}
+
+#searchButton {
+  background-color: rgb(220, 221, 221);
+  border: 1px solid white;
+}
+
+#searchButton:hover {
+  border: 1px solid #93b4fd;
+}
+
+.basicSearch {
+  margin: 1vw;
+}
+
 /* #BSOptions {
   display: flex;
   margin-right: 0;

@@ -18,18 +18,30 @@ export const getGifs = (searchTerm) => async (dispatch) => {
     try{
         let res
         let gifArr
-        let { resource } = searchTerm
-        if(searchTerm.type === 'keywords'){
-            let searchStr = searchTerm.text.split(' ').join('+')
-            res = await axios.get(`api/${resource}/keywords/${searchStr}`)
+        let { resource, type, text, rating, limit, offset, lang } = searchTerm
+        let searchStr = text
+        if(type === 'keywords'){
+            searchStr = searchStr.split(' ').join('+')
+            res = await axios.get(`api/${resource}/keywords?keywords=${searchStr}&limit=${limit}&offset=${offset}&rating=${rating}&lang=${lang}`)
+        } else if(type === 'id') {
+            res = await axios.get(`api/gifs/id/${searchStr}`)
+        } else if(type === 'random'){
+            // tag rating
+            res = await axios.get(`api/${resource}/random?keywords=${searchStr}&rating=${rating}`)
+        } else if(type === 'trending'){
+            // limit, rating
+            res = await axios.get(`api/${resource}/trending?rating=${rating}&limit=${limit}&offset=${offset}`)
             gifArr = res.data.data
+        } else if(type === 'translate'){
+            res = await axios.get(`api/${resource}/translate/${searchStr}`,
+            )
         } else {
-            let searchStr = searchTerm.text
-            res = await axios.get(`api/${resource}/id/${searchStr}`)
-            gifArr = [res.data.data]
+            gifArr = []
         }
-        console.log('-===Set up gifArr===-')
-        console.log(res.data.data)
+        gifArr = res.data.data
+        if(!Array.isArray(gifArr)){
+            gifArr = [gifArr]
+        }
         dispatch(setGifs(gifArr))
         
     } catch(err) {

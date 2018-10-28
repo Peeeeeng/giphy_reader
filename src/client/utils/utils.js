@@ -1,4 +1,4 @@
-const ratingType = ['', 'Y', 'G', 'PG', 'PG-13', 'R']
+const ratingType = ['ALL', 'Y', 'G', 'PG', 'PG-13', 'R']
 const langType = [
     {"English":"en"},
     {"Spanish":"es"},

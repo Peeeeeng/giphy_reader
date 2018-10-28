@@ -10,12 +10,12 @@ class SearchPanel extends Component {
     constructor(props){
         super(props)
         this.state = {
-            byKeywords: true,
+            type: 'keywords',
             searchInput: '',
             resource: 'gifs',
             totalLimit: 25,
             offset: 0,
-            rating: '',
+            rating: 'ALL',
             lang: 'en',
             advance: false,
         }
@@ -36,7 +36,7 @@ class SearchPanel extends Component {
         
         const { 
             searchInput, 
-            byKeywords, 
+            type, 
             resource, 
             totalLimit, 
             offset, 
@@ -49,61 +49,67 @@ class SearchPanel extends Component {
         evt.persist()
         const searchTerm = {
             text: searchInput,
-            type: byKeywords ? 'keywords' : 'id',
+            type,
             resource,
             rating,
             lang,
             limit: Math.abs(Math.floor(totalLimit)),
             offset: Math.abs(Math.floor(offset)),
         }
-        // searchTerm.text = searchInput
-        // searchTerm.type = byKeywords ? 'keywords' : 'id'
-        // searchTerm.resource = resource
 
-        // searchTerm.language = lang
-        const limit = Math.floor(totalLimit)
-        console.log(limit)
-        console.log(!isNaN(totalLimit))
+        // const limit = Math.floor(totalLimit)
+        // console.log(limit)
+        // console.log(!isNaN(totalLimit))
 
         this.props.getGifs(searchTerm)
     }
 
     handleBSOptions = (evt) => {
         console.log(evt.target.value)
-        if(evt.target.value === 'keywords' && !this.state.byKeywords){
-            this.setState({...this.state, byKeywords: true})
-        } else if (evt.target.value === 'id' && this.state.byKeywords){
-            this.setState({...this.state, byKeywords: false})
-        }
+        const type = evt.target.value
+        this.setState({
+            ...this.state, 
+            type,
+            advance: (type === 'id' || type === 'translate') ? false : this.state.advance
+        })
     }
 
     handleSelectChange = (evt) => {
         // console.log(evt.target.id)
         // console.log(evt.target.value)
-        this.setState({...this.state, [evt.target.id]: evt.target.value})
+        this.setState({
+            ...this.state, 
+            [evt.target.id]: evt.target.value
+        })
     }
 
     openAdvance = (evt) => {
         this.setState({
-            advance: true
+            advance: !this.state.advance
         })
     }
 
     render(){
-        const { totalLimit, offset, searchInput } = this.state
+        const { totalLimit, offset, type, advance } = this.state
         console.log(this.state)
         return (
             <div>
                 <div className='basicSearch'>
                     <div>
+                        <label>Resource</label>
+                        <select id='resource'
+                        onChange={this.handleSelectChange}>
+                            <option value="gifs">Gifs</option>
+                            <option value="stickers">Stickers</option>
+                        </select>
                         <input id='searchInput' 
-                        placeholder='Type in search term'
+                        placeholder='Search terms'
                         onChange={this.handleInput}
                         />
                         <button id='searchButton'
                         onClick={this.handleSearch}
                         disabled={isNaN(totalLimit) || isNaN(offset)}
-                        > {searchInput?'Search':'Random'}
+                        >Search
                         </button>
                     </div>
                     <div id='BSOptions'>
@@ -112,7 +118,6 @@ class SearchPanel extends Component {
                         value='keywords' 
                         id='searchByKeywords'
                         defaultChecked={true}
-                        // checked={byKeywords} 
                         onClick={this.handleBSOptions}
                         />
                         <label htmlFor='searchByKeywords'>
@@ -123,53 +128,90 @@ class SearchPanel extends Component {
                         name='searchBy' 
                         value='id' 
                         id='searchById'
-                        // checked={!byKeywords} 
                         onClick={this.handleBSOptions}
                         />
                         <label htmlFor='searchById'>
                             Gif Id
                         </label>
+
+                        <input type='radio' 
+                        name='searchBy' 
+                        value='random' 
+                        id='searchRandom'
+                        onClick={this.handleBSOptions}
+                        />
+                        <label htmlFor='searchRandom'>
+                            Random
+                        </label>
+
+                        <input type='radio' 
+                        name='searchBy' 
+                        value='trending' 
+                        id='searchTrending'
+                        onClick={this.handleBSOptions}
+                        />
+                        <label htmlFor='searchTrending'>
+                            Trending
+                        </label>
+
+                        <input type='radio' 
+                        name='searchBy' 
+                        value='translate' 
+                        id='searchTranslate'
+                        onClick={this.handleBSOptions}
+                        />
+                        <label htmlFor='searchTranslate'>
+                            Translate
+                        </label>
                         
                         <button id='advanceSearch'
-                        onClick={this.openAdvance}>
-                        Advance Search
+                        onClick={this.openAdvance}
+                        disabled={type === 'id' || type === 'translate'}>
+                            Advance Search
                         </button>
+
+                        
                     </div>
                 </div>
+
+                {advance
+                ?
                 <div className='advanceSearch'>
                     <div className='ASSelector'>
-
-                        <label>resource</label>
-                        <select id='resource'
-                        onChange={this.handleSelectChange}>
-                            <option value="gifs">Gifs</option>
-                            <option value="stickers">Stickers</option>
-                        </select>
 
                         <label>Rating</label>
                         <select id='rating'
                         onChange={this.handleSelectChange}>
                             {ratingType.map((rating) => {
                                 return (
-                                    <option value={rating}>{rating}</option>
+                                    <option value={rating} key={rating}>{rating}</option>
                                 )
                             })}
                         </select>
 
-                        <label>Language</label>
-                        <select id='lang'
-                        onChange={this.handleSelectChange}>
-                        {langType.map((language) => {
-                            const [ key ] = Object.keys(language)
-                                return (
-                                    <option value={language[key]}>{key}</option>
-                                )
-                        })}
-                        </select>
+                        {type === 'keywords'
+                        ?
+                        <div>
+                            <label>Language</label>
+                            <select id='lang'
+                            onChange={this.handleSelectChange}>
+                            {langType.map((language) => {
+                                const [ key ] = Object.keys(language)
+                                    return (
+                                        <option value={language[key]} key={key}>{key}</option>
+                                    )
+                            })}
+                            </select>
+                        </div>
+                        :
+                        null
+                        }
 
                     </div>
 
                     <div className='ASInputer'>
+                        {type === 'keywords' || type === 'trending'
+                        ?
                         <div>
                             <label>Result Number Limit</label>
                             <input id='totalLimit'
@@ -180,6 +222,11 @@ class SearchPanel extends Component {
                             ? 'Please enter a proper number.'
                             : ''}</font>
                         </div>
+                        :
+                        null
+                        }
+                        {type === 'keywords' || type === 'trending'
+                        ?
                         <div>
                             <label>Offset</label>
                             <input id='offset'
@@ -190,8 +237,14 @@ class SearchPanel extends Component {
                             ? 'Please enter a proper number.'
                             : ''}</font>
                         </div>
+                        :
+                        null
+                        }
                     </div>
                 </div>
+                :
+                null
+                }
             </div>
         )
     }
