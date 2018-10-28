@@ -20,11 +20,11 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 
-let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
-  counter += 1;
-  return { id: counter, name, calories, fat, carbs, protein };
-}
+// let counter = 0;
+// function createData(name, calories, fat, carbs, protein) {
+//   counter += 1;
+//   return { id: counter, name, calories, fat, carbs, protein };
+// }
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -38,9 +38,6 @@ function desc(a, b, orderBy) {
 
 function stableSort(array, cmp) {
     const stabilizedThis = array.map((el, index) => {
-        console.log('StableSort')
-        console.log(el)
-        console.log(index)
         return [el, index]
     });
     stabilizedThis.sort((a, b) => {
@@ -52,20 +49,19 @@ function stableSort(array, cmp) {
 }
 
 function getSorting(order, orderBy) {
-    console.log('getSorting')
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
 const rows = [
     { id: 'embed_url', numeric: false, disablePadding: false, label: 'Image' },
-    { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
-    { id: 'id', numeric: true, disablePadding: false, label: 'Id' },
-    { id: 'rating', numeric: false, disablePadding: false, label: 'Rating' },
-    { id: 'slug', numeric: false, disablePadding: false, label: 'Slug' },
-    { id: 'import_datetime', numeric: true, disablePadding: false, label: 'Import Date' },
-    { id: 'trending_datetime', numeric: true, disablePadding: false, label: 'Trending Date' },
-    { id: 'username', numeric: false, disablePadding: false, label: 'Author' },
-    { id: '_score', numeric: true, disablePadding: false, label: 'Score' },
+    { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
+    { id: 'id', numeric: false, disablePadding: true, label: 'Id' },
+    { id: 'rating', numeric: false, disablePadding: true, label: 'Rating' },
+    { id: 'slug', numeric: false, disablePadding: true, label: 'Slug' },
+    { id: 'import_datetime', numeric: false, disablePadding: true, label: 'Import Date' },
+    { id: 'trending_datetime', numeric: false, disablePadding: true, label: 'Trending Date' },
+    { id: 'username', numeric: false, disablePadding: true, label: 'Author' },
+    { id: '_score', numeric: false, disablePadding: true, label: 'Score' },
 ];
 
 
@@ -198,31 +194,14 @@ class DisplayData extends Component {
             order: 'asc',
             orderBy: 'id',
             // selected: [],
-            data: this.props.gifArr || [
-            // createData('Cupcake', 305, 3.7, 67, 4.3),
-            // createData('Donut', 452, 25.0, 51, 4.9),
-            // createData('Eclair', 262, 16.0, 24, 6.0),
-            // createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-            // createData('Gingerbread', 356, 16.0, 49, 3.9),
-            // createData('Honeycomb', 408, 3.2, 87, 6.5),
-            // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-            // createData('Jelly Bean', 375, 0.0, 94, 0.0),
-            // createData('KitKat', 518, 26.0, 65, 7.0),
-            // createData('Lollipop', 392, 0.2, 98, 0.0),
-            // createData('Marshmallow', 318, 0, 81, 2.0),
-            // createData('Nougat', 360, 19.0, 9, 37.0),
-            // createData('Oreo', 437, 18.0, 63, 4.0),
-            ],
+            data: this.props.gifArr || [],
             page: 0,
-            rowsPerPage: 5,
+            rowsPerPage: 10,
         };
     }
     
 
 static getDerivedStateFromProps(props, state){
-    // console.log('yeah')
-    // console.log(props.gifArr)
-    // console.log('new props coming')
     state = {...state, data: props.gifArr}
     return state
 }
@@ -281,7 +260,6 @@ render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-    // console.log(this.state.data)
     return (
     <Paper className={classes.root}>
         <EnhancedTableToolbar /*numSelected={selected.length}*/ />
@@ -301,8 +279,6 @@ render() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
                 // const isSelected = this.isSelected(n.id);
-                console.log('this is inside maping to table')
-                console.log(n)
                 return (
                     <TableRow
                     hover
@@ -316,23 +292,23 @@ render() {
                     {/* <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                     </TableCell> */}
-                    <TableCell>
+                    <TableCell padding='dense'>
                         <img src={n.images.fixed_height_small.url} alt={n.slug} />
                     </TableCell>
-                    <TableCell numeric>{n.title}</TableCell>
-                    <TableCell numeric>{n.id}</TableCell>
-                    <TableCell numeric>{n.rating}</TableCell>
-                    <TableCell numeric>{n.slug}</TableCell>
-                    <TableCell numeric>{n.import_datetime}</TableCell>
-                    <TableCell numeric>{n.trending_datetime}</TableCell>
-                    <TableCell numeric>{n.username}</TableCell>
-                    <TableCell numeric>{n._score}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n.title}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n.id}</TableCell>
+                    <TableCell numeric={false} padding='dense'>{n.rating}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n.slug}</TableCell>
+                    <TableCell numeric={false} padding='dense'>{n.import_datetime}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n.trending_datetime}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n.username}</TableCell>
+                    <TableCell numeric={false} padding='none'>{n._score}</TableCell>
                     </TableRow>
                 );
                 })}
             {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
-                <TableCell colSpan={6} />
+                <TableCell colSpan={4} />
                 </TableRow>
             )}
             </TableBody>

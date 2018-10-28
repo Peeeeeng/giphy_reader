@@ -56,7 +56,10 @@ class SearchPanel extends Component {
             limit: Math.abs(Math.floor(totalLimit)),
             offset: Math.abs(Math.floor(offset)),
         }
-
+        if(!searchTerm.text.split(' ').join('')){
+            searchTerm.type = 'random'
+        }
+        this.setState({...this.state, searchInput: ''})
         // const limit = Math.floor(totalLimit)
         // console.log(limit)
         // console.log(!isNaN(totalLimit))
@@ -90,7 +93,7 @@ class SearchPanel extends Component {
     }
 
     render(){
-        const { totalLimit, offset, type, advance } = this.state
+        const { totalLimit, offset, type, advance, searchInput } = this.state
         console.log(this.state)
         return (
             <div>
@@ -105,6 +108,7 @@ class SearchPanel extends Component {
                         <input id='searchInput' 
                         placeholder='Search terms'
                         onChange={this.handleInput}
+                        value={searchInput}
                         />
                         <button id='searchButton'
                         onClick={this.handleSearch}
