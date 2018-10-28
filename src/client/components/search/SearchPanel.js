@@ -109,7 +109,7 @@ class SearchPanel extends Component {
                         <button id='searchButton'
                         onClick={this.handleSearch}
                         disabled={isNaN(totalLimit) || isNaN(offset)}
-                        >Search
+                        >&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;
                         </button>
                     </div>
                     <div id='BSOptions'>
