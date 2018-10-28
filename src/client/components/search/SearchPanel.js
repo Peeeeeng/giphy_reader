@@ -32,8 +32,6 @@ class SearchPanel extends Component {
     }
 
     handleSearch = async (evt) => {
-        console.log(this.state.searchInput)
-        
         const { 
             searchInput, 
             type, 
@@ -60,15 +58,10 @@ class SearchPanel extends Component {
             searchTerm.type = 'random'
         }
         this.setState({...this.state, searchInput: ''})
-        // const limit = Math.floor(totalLimit)
-        // console.log(limit)
-        // console.log(!isNaN(totalLimit))
-
         this.props.getGifs(searchTerm)
     }
 
     handleBSOptions = (evt) => {
-        console.log(evt.target.value)
         const type = evt.target.value
         this.setState({
             ...this.state, 
@@ -78,8 +71,6 @@ class SearchPanel extends Component {
     }
 
     handleSelectChange = (evt) => {
-        // console.log(evt.target.id)
-        // console.log(evt.target.value)
         this.setState({
             ...this.state, 
             [evt.target.id]: evt.target.value
@@ -94,7 +85,6 @@ class SearchPanel extends Component {
 
     render(){
         const { totalLimit, offset, type, advance, searchInput } = this.state
-        console.log(this.state)
         return (
             <div>
                 <div className='basicSearch'>
